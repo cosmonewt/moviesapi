@@ -1,0 +1,161 @@
+Fastapi Structure Draft
+
+Folder structure:
+.
+├── app
+│   ├── __init__.py
+│   ├── main.py
+│   ├── dependencies.py
+│   └── routers
+│   │   ├── __init__.py
+│   │   └── movies.py
+│   └── internal
+│       ├── __init__.py
+│       └── admin.py
+
+File contents:
+app/main.py
+Fastapi app, imported routers(APIRouter), homepage routes
+
+app/dependencies.py
+dependencies
+
+app/routers/movies/movies.py
+APIRouter, endpoint routes, imported logic classes
+
+app/routers/movies/movies_database.py
+database connection, database logic, database queries
+
+app/routers/movies/movies_route_classes
+endpoint logic (sketch out logic in pseudo code)
+
+
+[POST] /api/movies – Creates a movie
+# receive (json) data
+
+# database connection
+
+# insert data into database table
+
+# return response
+
+[GET] /api/movies – Lists movies
+# database connection
+
+# retrieve (all 5k?) movies
+
+# return response listing data
+
+[GET] /api/movies/:id – Gets a movie by ID
+# retrieve movie id from url parameters
+
+# database connection
+
+# retrieve movie from database by id
+
+# return response with movie data
+
+[PUT] /api/movies/:id – Updates a movie by ID
+# retrieve data and movie id
+
+# database connection
+
+# update movie by id with new data
+
+# return response
+
+[DELETE] /api/movies/:id – Deletes movie by ID
+# retrieve movie id from url parameters
+
+# delete movie by id
+
+# return response
+
+[DELETE] /api/movies – Bulk delete (all) movies
+# delete (all) movies
+
+# return response
+
+
+
+https://blog.stoplight.io/api-design-patterns-for-rest-web-services
+[POST] /api/recipe – Creates a recipe
+[GET] /api/recipe – Lists recipes
+[GET] /api/recipe/:id – Gets a recipe by ID
+[PUT] /api/recipe/:id – Updates a recipe by ID
+[DELETE] /api/recipe/:id – Deletes recipe by ID
+[DELETE] /api/recipe – Bulk delete recipes
+
+GET requests can be cached
+GET requests are idempotent (in that they can be called any number of times while guaranteeing the same outcome)
+GET requests should never be used when dealing with sensitive data
+GET requests have length restrictions
+GET requests should be used only to retrieve data
+POST requests are never cached (unless specified in the header)
+POST requests are NOT idempotent
+POST requests have no restrictions on data length
+
+
+What does Python SQLModel, and Pydantic do in FastAPI?
+SQLModel makes it easy to connect and work with databases with FastAPI.
+Pydantic is a data validation library for Python.
+
+
+How to create and use a SQL database connection in FastAPI?
+```
+from typing import Annotated
+
+from fastapi import Depends, FastAPI, HTTPException, Query
+from sqlmodel import Field, Session, SQLModel, create_engine, select
+
+
+class Hero(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
+    age: int | None = Field(default=None, index=True)
+    secret_name: str
+
+
+sqlite_file_name = "database.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
+
+connect_args = {"check_same_thread": False}
+engine = create_engine(sqlite_url, connect_args=connect_args)
+
+# Used to create .db file and table/-s, if they don't already exist
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+# Creates database connection
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+# Uses Depends() to create database connection, when passed as type to routes
+SessionDep = Annotated[Session, Depends(get_session)]
+
+app = FastAPI()
+
+# Creates .db file and tables on startup, if they don't already exist
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
+
+
+@app.post("/heroes/")
+def create_hero(hero: Hero, session: SessionDep) -> Hero:
+    session.add(hero)
+    session.commit()
+    session.refresh(hero)
+    return hero
+
+
+@app.get("/heroes/")
+def read_heroes(
+    session: SessionDep,
+    offset: int = 0,
+    limit: Annotated[int, Query(le=100)] = 100,
+) -> list[Hero]:
+    heroes = session.exec(select(Hero).offset(offset).limit(limit)).all()
+    return heroes
+```

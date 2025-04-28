@@ -1,0 +1,116 @@
+folder structure:
+.
+├── app
+│   ├── __init__.py
+│   ├── main.py
+│   ├── dependencies.py
+│   └── routers
+│   │   ├── __init__.py
+│   │   ├── items.py
+│   │   └── users.py
+│   └── internal
+│       ├── __init__.py
+│       └── admin.py
+
+
+packages:
+Pydantic (included with fastapi), Typing (included with python), pytest, fastapi 
+
+Endpoints (url structure, prefix, url parameter, query parameter, etc.):
+create
+batch create
+read
+batch read
+update
+batch update
+delete
+batch delete
+
+
+Other:
+should database connection be a dependency? if so, where should it be 
+A: Yes, it will be part of SessionDep and is passed as a type to the route function.
+https://fastapi.tiangolo.com/tutorial/sql-databases/?h=database#create-an-engine
+
+FastAPI authentication, difference between OAuth and JWT?
+https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#hash-and-verify-the-passwords
+
+Testing (pytest)
+https://fastapi.tiangolo.com/tutorial/testing/
+when run, does pytest automatically search for and execute test files?
+is there some sort of file structure for api tests?
+
+Typing (Pydantic, Typing)
+https://mypy.readthedocs.io/en/latest/cheat_sheet_py3.html
+
+References:
+https://fastapi.tiangolo.com/tutorial/bigger-applications/#an-example-file-structure
+https://fastapi.tiangolo.com/python-types/
+
+.
+├── app
+│   ├── __init__.py
+│   ├── main.py
+│   ├── dependencies.py
+│   └── routers
+│   │   ├── __init__.py
+│   │   ├── items.py
+│   │   └── users.py
+│   └── internal
+│       ├── __init__.py
+│       └── admin.py
+
+main.py contains FastAPI declaration, homepage routes and imported routers
+app/dependencies.py contains code reused throughout the application to avoid repetition.
+
+FastAPI Dependencies:
+With the Dependency Injection system, you can also tell FastAPI that your path operation function also "depends" on something else that should be executed before your path operation function, and FastAPI will take care of executing it and "injecting" the results.
+
+Global dependencies can be applied at FastAPI instantiation that will be combined with the dependencies for each APIRouter. 
+
+- Dependencies declared in a specific path operation will be executed
+- The order of dependencies execution is: 
+1. Router dependencies are executed first
+2. Decorator dependencies
+3. Normal parameter dependencies
+- Security dependencies can also be added with scopes
+
+Having dependencies in the APIRouter can be used, for example, to require authentication for a whole group of path operations. Even if the dependencies are not added individually to each one of them.
+
+https://fastapi.tiangolo.com/tutorial/dependencies/
+app/routers?
+A: path operations related to a specific subject.
+The variable name "router" can be changed as needed.
+Path operations are created using APIRouter as per below code snippet.
+
+```
+from fastapi import APIRouter
+router = APIRouter()
+```
+
+APIRouter is a "mini FastAPI" classe, with the same options supported, same parameters, responses, dependencies, tags, etc.
+
+tags are useful for automatic interactive documentation systems (using OpenAPI).
+
+app/internal?
+
+__init__.py converts folders into packages or respective sub-packages.
+.py files inside packages are modules.
+
+Datasets:
+
+NYC squirrel data analysis prompt:
+Knowing how to ask the right questions is an important data analytics skill, and this dataset can be a great tool to study and come up with questions that can be answered with this squirrel census. Some might include their most frequented bodega trash cans, most popular coat patterns, or where they summer.
+
+grocery store membership data seems interesting to you.
+the movies dataset may be better to implement efficient search and sort with.
+
+References:
+https://www.reddit.com/r/learnprogramming/comments/rxgbgm/api_ideas/
+https://www.reddit.com/r/analytics/comments/14mh99f/websites_to_find_datasets_for_projects/
+
+
+https://medium.com/@amirm.lavasani/how-to-structure-your-fastapi-projects-0219a6600a8f
+https://www.reddit.com/r/FastAPI/comments/1aijy4d/beginner_question_for_organizing_fastapi_project/
+https://github.com/zhanymkanov/fastapi-best-practices
+

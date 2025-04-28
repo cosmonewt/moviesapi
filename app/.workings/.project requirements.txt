@@ -1,0 +1,83 @@
+Project Name:
+moviesapi
+
+Project Description:
+An api project built with FastAPI, movie data from IMDB, following SOLID or system design principles for scalability. Its purpose is to add a project that employers would like to see and improve programming skills. 
+
+Tech Stack:
+FastAPI(Pydantic, Starlette, …)
+Pytest
+Typing
+SQLModel
+Git
+
+Folder Structure:
+.
+├── app
+│   ├── __init__.py
+│   ├── main.py
+│   ├── dependencies.py
+│   └── routers
+│   │   ├── __init__.py
+│   │   └── movies.py
+│   └── internal
+│       ├── __init__.py
+│       └── admin.py
+
+Endpoints:
+[POST] /api/movies – Creates a movie
+# receive (json) data
+# database connection
+# insert data into database table
+# return response
+
+[GET] /api/movies – Lists movies
+# database connection
+# retrieve (all 5k?) movies
+# return response listing data
+
+[GET] /api/movies/:id – Gets a movie by ID
+# retrieve movie id from url parameters
+# database connection
+# retrieve movie from database by id
+# return response with movie data
+
+[PUT] /api/movies/:id – Updates a movie by ID
+# retrieve data and movie id
+# database connection
+# update movie by id with new data
+# return response
+
+[DELETE] /api/movies/:id – Deletes movie by ID
+# retrieve movie id from url parameters
+# delete movie by id
+# return response
+
+[DELETE] /api/movies – Bulk delete (all) movies
+# delete (all) movies
+# return response
+
+
+References:
+https://fastapi.tiangolo.com/tutorial/bigger-applications/#an-example-file-structure
+https://fastapi.tiangolo.com/python-types/
+https://www.reddit.com/r/learnprogramming/comments/rxgbgm/api_ideas/
+https://www.reddit.com/r/analytics/comments/14mh99f/websites_to_find_datasets_for_projects/
+https://blog.stoplight.io/api-design-patterns-for-rest-web-services
+https://medium.com/@amirm.lavasani/how-to-structure-your-fastapi-projects-0219a6600a8f
+https://www.reddit.com/r/FastAPI/comments/1aijy4d/beginner_question_for_organizing_fastapi_project/
+https://github.com/zhanymkanov/fastapi-best-practices
+
+FastAPI authentication, difference between OAuth and JWT?
+https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/#hash-and-verify-the-passwords
+
+Testing (pytest)
+https://fastapi.tiangolo.com/tutorial/testing/
+when run, does pytest automatically search for and execute test files?
+is there some sort of file structure for api tests?
+
+Typing (Pydantic, Typing)
+https://mypy.readthedocs.io/en/latest/cheat_sheet_py3.html
+
+
+

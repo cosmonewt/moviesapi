@@ -1,0 +1,37 @@
+purpose:
+build an api to enhance portfolio, useful, and employable programming skillset
+
+api requirements:
+X dataset
+X SQL database & table
+X create & load data into SQL table
+- fastapi database connection (may be a dependency)
+- draft CRUD end points design in pseudo code
+- CRUD end points
+
+X create fastapi files & folder structure
+
+- efficient search and sort
+- relevant calculations with dataset
+- cache models
+- cache query results
+- database-backend job queuing
+- authentication (JWT Token/OAuth/SSO) - may be a dependency
+
+- python typing
+- unit testing
+- follow OOP & SOLID principles
+- structure with separation of API modules (e.g.: controllers/router/models/utilities, etc.)
+- good error handling (what does this mean?)
+
+- git branch to work outside of main branch with
+- git unstage changes
+- git undo commit
+- git reverse pushed files
+- git squash commits
+
+- autogenerate documentation with openapi
+
+
+beyond the above, each app benefits from different relevant features.
+
